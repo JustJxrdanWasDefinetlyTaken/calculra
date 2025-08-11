@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Calculra School District</title>
+<meta name="description" content="Official site of the fictional Calculra School District — for demonstration and educational purposes only."/>
+<style>
+  :root{
+    --nav:#173a66; --nav-dark:#0f2a4a; --accent:#2b74c6; --muted:#6b7480; --bg:#f4f7fb;
+    --card:#ffffff; --radius:10px; --glass: rgba(255,255,255,0.6);
+    --maxw:1200px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter, "Segoe UI", Arial, sans-serif;background:var(--bg);color:#1f2933;line-height:1.35}
+  .topbar{background:linear-gradient(90deg,var(--nav),var(--nav-dark));color:white;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{
+    width:54px;height:54px;border-radius:10px;background:#fff;color:var(--nav);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;box-shadow:0 2px 6px rgba(15,40,74,0.18)
+  }
+  .brand h1{margin:0;font-size:1.05rem;letter-spacing:0.2px}
+  .brand p{margin:0;font-size:0.78rem;opacity:0.9}
+  .top-actions{display:flex;gap:10px;align-items:center}
+  .clock{font-weight:600;font-size:0.95rem;opacity:0.95}
+  .search{display:flex;background:rgba(255,255,255,0.12);border-radius:8px;padding:6px 8px;align-items:center;gap:8px}
+  .search input{background:transparent;border:0;color:white;outline:0;padding:6px;width:180px}
+  nav{background:var(--nav-dark);display:flex;gap:10px;padding:10px 16px;color:white;align-items:center;box-shadow:0 2px 8px rgba(10,20,40,0.06)}
+  .nav-left{display:flex;gap:8px;align-items:center}
+  .nav-item{position:relative}
+  .nav-link{color:white;padding:8px 10px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:600}
+  .nav-link:hover{background:rgba(255,255,255,0.06)}
+  .dropdown{position:absolute;top:40px;left:0;background:white;color:#111;border-radius:8px;min-width:200px;box-shadow:0 10px 30px rgba(9,30,66,0.12);display:none;z-index:50}
+  .dropdown a{display:block;padding:10px 12px;color:#123;font-size:0.95rem;text-decoration:none}
+  .dropdown a:hover{background:#f2f6fb}
+  .nav-item:hover .dropdown{display:block}
+  .hero{max-width:var(--maxw);margin:20px auto;padding:20px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.9));box-shadow:0 6px 20px rgba(12,40,80,0.06);display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:center}
+  .hero-left h2{margin:0;font-size:1.6rem;color:var(--nav)}
+  .hero-left p{margin:8px 0 14px;color:var(--muted)}
+  .cta-row{display:flex;gap:10px;align-items:center}
+  .btn{background:var(--accent);color:white;padding:10px 14px;border-radius:8px;border:0;cursor:pointer;font-weight:700}
+  .btn.ghost{background:transparent;border:1px solid #dbe9ff;color:var(--nav);font-weight:700}
+  .carousel{position:relative;border-radius:8px;overflow:hidden;min-height:200px;background:linear-gradient(180deg,#eef6ff,#ffffff)}
+  .slides{display:flex;transition:transform 400ms ease}
+  .slide{min-width:100%;padding:18px;display:flex;gap:16px;align-items:center}
+  .slide img{width:220px;height:140px;object-fit:cover;border-radius:8px;box-shadow:0 6px 18px rgba(27,55,96,0.12)}
+  .slide .cap{max-width:calc(100% - 240px)}
+  .carousel .dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+  .dot{width:10px;height:10px;border-radius:50%;background:rgba(0,0,0,0.15);cursor:pointer}
+  .dot.active{background:var(--accent)}
+  .carousel .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(6,18,40,0.06);border:0;padding:8px;border-radius:6px;cursor:pointer}
+  .carousel .prev{left:10px} .carousel .next{right:10px}
+  main{max-width:var(--maxw);margin:18px auto;display:grid;grid-template-columns:2fr 1fr;gap:18px;padding:0 16px}
+  section.card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(12,30,66,0.04)}
+  .flex{display:flex;gap:12px;align-items:center}
+  .announcements{display:flex;flex-direction:column;gap:8px}
+  .ticker{background:#fff7e6;border-left:4px solid #ffb64d;padding:8px;border-radius:8px;font-size:0.95rem;color:#6b4b00}
+  .quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .quick{background:linear-gradient(180deg,#f8fbff,#fff);padding:12px;border-radius:8px;text-align:center;box-shadow:0 3px 10px rgba(12,30,66,0.03);cursor:pointer}
+  .quick svg{width:36px;height:36px;margin-bottom:8px}
+  .staff-list{display:grid;gap:10px}
+  .staff{display:flex;gap:12px;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(180deg,#ffffff,#fbfdff)}
+  .avatar{width:56px;height:56px;border-radius:8px;flex:0 0 56px;background:linear-gradient(180deg,#dbeeff,#f0f7ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--nav)}
+  .staff .meta{flex:1}
+  .meta small{color:var(--muted);display:block}
+  .map{width:100%;height:220px;border-radius:8px;overflow:hidden;background:linear-gradient(180deg,#eef6ff,#fff)}
+  .event{padding:10px;border-radius:8px;background:linear-gradient(180deg,#fff,#fbfdff);display:flex;justify-content:space-between;align-items:center}
+  .event .left{display:flex;gap:10px;align-items:center}
+  .date-pill{background:var(--nav);color:white;padding:8px 10px;border-radius:8px;font-weight:700}
+  .faq-item{border-top:1px solid #eef2f6;padding:10px 0}
+  .faq-item button{width:100%;text-align:left;border:0;background:none;padding:0;font-weight:700;padding-bottom:6px;cursor:pointer}
+  .faq-answer{display:none;color:var(--muted);font-size:0.95rem;padding-top:6px}
+  footer{margin-top:18px;background:linear-gradient(180deg,var(--nav-dark),#0c2540);color:white;padding:28px 16px}
+  .footer-grid{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:18px}
+  .footer-grid h4{margin:0 0 10px 0}
+  .small{font-size:0.9rem;color:#d7e6ff}
+  @media (max-width:980px){.hero{grid-template-columns:1fr;gap:12px}.topbar{flex-direction:column;align-items:flex-start}.nav-left{flex-wrap:wrap}.carousel .nav-btn{display:none}}
+  @media (max-width:720px){main{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="topbar" role="banner">
+  <div class="brand" aria-hidden="false">
+    <div class="logo" aria-hidden="true">CSD</div>
+    <div>
+      <h1>Calculra School District</h1>
+      <p class="small">Public · K–12 · Serving Calculra City</p>
+    </div>
+  </div>
+  <div class="top-actions" aria-hidden="false">
+    <div class="clock" id="liveClock">—</div>
+    <div class="search" role="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input id="siteSearch" placeholder="Search district site..." aria-label="Search site">
+    </div>
+  </div>
+</div>
+<nav role="navigation" aria-label="Primary navigation">
+  <div class="nav-left">
+    <div class="nav-item">
+      <a class="nav-link" href="#">Home</a>
+    </div>
+    <div class="nav-item">
+      <a class="nav-link" href="#">About</a>
+      <div class="dropdown" aria-hidden="true">
+        <a href="#">Mission & Vision</a>
+        <a href="#">Board of Education</a>
+        <a href="#">District Policies</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a class="nav-link" href="#">Schools</a>
+      <div class="dropdown" aria-hidden="true">
+        <a href="#">Elementary Schools</a>
+        <a href="#">Middle Schools</a>
+        <a href="#">High Schools</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a class="nav-link" href="#">Departments</a>
+      <div class="dropdown" aria-hidden="true">
+        <a href="#">Curriculum & Instruction</a>
+        <a href="#">Student Services</a>
+        <a href="#">Human Resources</a>
+      </div>
+    </div>
+    <div class="nav-item">
+      <a class="nav-link" href="#">Families</a>
+      <div class="dropdown" aria-hidden="true">
+        <a href="#">Enrollment</a>
+        <a href="#">Meal Programs</a>
+        <a href="#">Transportation</a>
+      </div>
+    </div>
+  </div>
+  <div style="margin-left:auto;display:flex;gap:8px">
+    <a class="nav-link" href="#" style="background:linear-gradient(90deg,#2b74c6,#1f5daa)">Pay Fees</a>
+    <a class="nav-link" href="#">Parent Portal</a>
+  </div>
+</nav>
+<section class="hero" aria-labelledby="heroTitle">
+  <div class="hero-left">
+    <h2 id="heroTitle">Excellence, Equity, and Opportunity for Every Student</h2>
+    <p>Calculra School District is dedicated to preparing students with the knowledge and skills they need to thrive in college, career and life. We believe in high expectations and strong community partnerships.</p>
+    <div class="cta-row">
+      <button class="btn" onclick="alert('This is a demo site. No real actions.')">Enroll Now</button>
+      <button class="btn ghost" onclick="document.getElementById('siteSearch').focus()">Search the Site</button>
+      <div style="margin-left:auto;align-self:center;color:var(--muted);font-weight:600">District updates • <span id="tickerSummary">No critical alerts</span></div>
+    </div>
+  </div>
+  <div>
+    <div class="carousel" aria-roledescription="carousel" aria-label="District photos">
+      <div class="slides" id="slides">
+        <div class="slide">
+          <img alt="Students collaborating in class" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400'%3E%3Crect width='100%25' height='100%25' fill='%23eaf4ff'/%3E%3Cg transform='translate(40,40)'%3E%3Crect x='0' y='0' width='320' height='200' rx='12' fill='%23dbeeff'/%3E%3Ccircle cx='60' cy='60' r='28' fill='%23ffffff'/%3E%3Crect x='110' y='20' width='180' height='28' rx='6' fill='%23fff'/%3E%3Crect x='110' y='60' width='120' height='18' rx='6' fill='%23fff'/%3E%3C/text%3E%3C/g%3E%3C/svg%3E">
+          <div class="cap">
+            <h3 style="margin:0;color:var(--nav)">Back to School — A Strong Start</h3>
+            <p style="margin:6px 0;color:var(--muted)">Teachers and families preparing for the new school year with classroom orientation and resources for students of all grades.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <img alt="Robotics team celebrating" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400'%3E%3Crect width='100%25' height='100%25' fill='%23f0fbf6'/%3E%3Crect x='40' y='40' width='320' height='200' rx='12' fill='%23ddffef'/%3E%3C/g%3E%3C/svg%3E">
+          <div class="cap">
+            <h3 style="margin:0;color:var(--nav)">STEM Success</h3>
+            <p style="margin:6px 0;color:var(--muted)">Calculra High robotics and science programs showcase student innovation at regional competitions.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <img alt="School cafeteria and lunch program" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400'%3E%3Crect width='100%25' height='100%25' fill='%23fff7ea'/%3E%3Crect x='40' y='40' width='320' height='200' rx='12' fill='%23fff0d6'/%3E%3C/g%3E%3C/svg%3E">
+          <div class="cap">
+            <h3 style="margin:0;color:var(--nav)">Expanded Nutrition Programs</h3>
+            <p style="margin:6px 0;color:var(--muted)">Districtwide free lunch program expanded to serve every student — learn how to apply for additional assistance.</p>
+          </div>
+        </div>
+      </div>
+      <button class="nav-btn prev" aria-label="Previous photo" onclick="prevSlide()">‹</button>
+      <button class="nav-btn next" aria-label="Next photo" onclick="nextSlide()">›</button>
+      <div class="dots" id="dots" role="tablist">
+        <div class="dot active" onclick="gotoSlide(0)" role="tab" aria-selected="true"></div>
+        <div class="dot" onclick="gotoSlide(1)" role="tab" aria-selected="false"></div>
+        <div class="dot" onclick="gotoSlide(2)" role="tab" aria-selected="false"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<main>
+  <section class="card" aria-labelledby="newsTitle">
+    <h2 id="newsTitle">District News & Highlights</h2>
+    <div class="announcements">
+      <div class="ticker" id="alertTicker">No current alerts — school schedule is normal.</div>
+      <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:220px">
+          <h3 style="margin:0;color:var(--nav)">Back-to-School Night</h3>
+          <p class="small" style="margin:6px 0 0 0">Sep 15 • Meet teachers, preview curriculum, and hear from the superintendent.</p>
+        </div>
+        <div style="flex:1;min-width:220px">
+          <h3 style="margin:0;color:var(--nav)">Robotics Champions</h3>
+          <p class="small" style="margin:6px 0 0 0">Calculra High wins state robotics championship — student teams recognized at board meeting.</p>
+        </div>
+        <div style="flex:1;min-width:220px">
+          <h3 style="margin:0;color:var(--nav)">Meal Program Expanded</h3>
+          <p class="small" style="margin:6px 0 0 0">All K–12 students eligible for free lunch. Paperwork optional; learn more in Families & Meals.</p>
+        </div>
+      </div>
+    </div>
+    <hr style="margin:16px 0;border:none;border-top:1px solid #eef4fb"/>
+    <h3 style="margin:6px 0;color:var(--nav)">Superintendent's Message</h3>
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <img alt="Superintendent headshot" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='100%25' height='100%25' fill='%23eef4ff' rx='12'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='22' fill='%23193766'%3EDT%3C/text%3E%3C/svg%3E" style="width:96px;height:96px;border-radius:10px;flex:0 0 96px;box-shadow:0 6px 18px rgba(15,40,74,0.06)">
+      <div>
+        <p style="margin:0 0 8px 0"><strong>Dr. Lisa Thompson</strong><br><small class="small">Superintendent</small></p>
+        <p class="small" style="margin:0">Welcome to Calculra — together we will ensure every student has access to rigorous academics, supportive services, and opportunities to succeed. Our staff and community partners work year-round to elevate student learning.</p>
+      </div>
+    </div>
+    <hr style="margin:16px 0;border:none;border-top:1px solid #eef4fb"/>
+    <h3 style="margin:6px 0;color:var(--nav)">Featured Programs</h3>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+      <div style="flex:1;min-width:200px" class="card">
+        <strong>Early Learning</strong>
+        <p class="small" style="margin:8px 0 0 0">High-quality preschool options across the district to give learners a strong start.</p>
+      </div>
+      <div style="flex:1;min-width:200px" class="card">
+        <strong>College & Career</strong>
+        <p class="small" style="margin:8px 0 0 0">Dual enrollment, internships, and counseling to prepare students for postsecondary success.</p>
+      </div>
+      <div style="flex:1;min-width:200px" class="card">
+        <strong>Special Education</strong>
+        <p class="small" style="margin:8px 0 0 0">Inclusive services and supports tailored to individual learning needs.</p>
+      </div>
+    </div>
+    <hr style="margin:16px 0;border:none;border-top:1px solid #eef4fb"/>
+    <h3 style="margin:6px 0;color:var(--nav)">Frequently Asked Questions</h3>
+    <div>
+      <div class="faq-item">
+        <button onclick="toggleFAQ(this,0)">How do I enroll my child?</button>
+        <div class="faq-answer">Visit the Families &gt; Enrollment page or stop by Student Services at 123 Learning Lane. Required documents: proof of residency, birth certificate, immunization records.</div>
+      </div>
+      <div class="faq-item">
+        <button onclick="toggleFAQ(this,1)">Where can I find school menus?</button>
+        <div class="faq-answer">Menus are posted monthly under Families &gt; Meals. Paper copies available at school front offices.</div>
+      </div>
+      <div class="faq-item">
+        <button onclick="toggleFAQ(this,2)">How do I contact my child's teacher?</button>
+        <div class="faq-answer">Use the Staff Directory or your school’s contact page to email teachers directly. Parent-Teacher conferences are scheduled in November.</div>
+      </div>
+    </div>
+  </section>
+  <aside>
+    <section class="card">
+      <h2>Quick Links</h2>
+      <div class="quick-grid">
+        <div class="quick" onclick="alert('Demo: Parent Portal')">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke="#2b74c6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 21v-1a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v1" stroke="#2b74c6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div style="font-weight:700">Parent Portal</div>
+          <div class="small">Grades & communications</div>
+        </div>
+        <div class="quick" onclick="alert('Demo: Meal Services')">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16" stroke="#2b74c6" stroke-width="1.4" stroke-linecap="round"/><path d="M7 10h10v7a3 3 0 0 1-3 3H10a3 3 0 0 1-3-3v-7z" stroke="#2b74c6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div style="font-weight:700">Meal Services</div>
+          <div class="small">Menu & eligibility</div>
+        </div>
+        <div class="quick" onclick="alert('Demo: Transportation')">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 13h1l1-3h12l1 3h1" stroke="#2b74c6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM17 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" stroke="#2b74c6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div style="font-weight:700">Transportation</div>
+          <div class="small">Bus routes & stops</div>
+        </div>
+      </div>
+    </section>
+    <section class="card" style="margin-top:14px">
+      <h2>Upcoming Events</h2>
+      <div class="event" style="margin-top:8px">
+        <div class="left">
+          <div class="date-pill">Aug 25</div>
+          <div>
+            <div style="font-weight:700">First Day of School</div>
+            <div class="small">All schools — 8:00 AM start</div>
+          </div>
+        </div>
+        <div class="small">Details →</div>
+      </div>
+      <div class="event" style="margin-top:10px">
+        <div class="left">
+          <div class="date-pill">Sep 15</div>
+          <div>
+            <div style="font-weight:700">Back-to-School Night</div>
+            <div class="small">Parents meet teachers</div>
+          </div>
+        </div>
+        <div class="small">RSVP</div>
+      </div>
+      <div style="margin-top:12px">
+        <a href="#" class="small" style="color:var(--accent);text-decoration:none">View full calendar →</a>
+      </div>
+    </section>
+    <section class="card" style="margin-top:14px">
+      <h2>Staff Directory (Preview)</h2>
+      <div class="staff-list" style="margin-top:8px">
+        <div class="staff">
+          <div class="avatar">LT</div>
+          <div class="meta">
+            <div style="font-weight:700">Dr. Lisa Thompson</div>
+            <small>Superintendent • lisa.thompson@calculra.edu</small>
+          </div>
+        </div>
+        <div class="staff">
+          <div class="avatar">MR</div>
+          <div class="meta">
+            <div style="font-weight:700">Mark Rivera</div>
+            <small>Director, Curriculum • mark.rivera@calculra.edu</small>
+          </div>
+        </div>
+        <div class="staff">
+          <div class="avatar">SL</div>
+          <div class="meta">
+            <div style="font-weight:700">Sarah Lee</div>
+            <small>Communications • sarah.lee@calculra.edu</small>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="card" style="margin-top:14px">
+      <h2>District Map</h2>
+      <div class="map" aria-hidden="false">
+        <svg viewBox="0 0 400 220" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#eef6ff"/>
+          <g stroke="#d6e8ff" stroke-width="2">
+            <path d="M20 180 C90 140, 180 160, 240 120" fill="none"/>
+            <path d="M40 40 L360 40" fill="none"/>
+            <path d="M80 20 L80 200" fill="none"/>
+          </g>
+          <g font-family="Arial" font-size="12" fill="#063058">
+            <g transform="translate(70,110)">
+              <circle r="10" fill="#ff7a59"/>
+              <text x="18" y="4">Calculra Elementary</text>
+            </g>
+            <g transform="translate(220,70)">
+              <circle r="10" fill="#4fc08d"/>
+              <text x="18" y="4">Calculra Middle</text>
+            </g>
+            <g transform="translate(300,150)">
+              <circle r="10" fill="#2b74c6"/>
+              <text x="18" y="4">Calculra High School</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </section>
+  </aside>
+</main>
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h4>Calculra School District</h4>
+      <div class="small">123 Learning Lane<br/>Calculra City, CA 90000</div>
+      <div style="margin-top:8px" class="small">Phone: (555) 123-4567 • Email: info@calculra.edu</div>
+    </div>
+    <div>
+      <h4>Parents & Families</h4>
+      <div class="small">Enrollment<br/>Meal Programs<br/>Bus Routes</div>
+    </div>
+    <div>
+      <h4>Departments</h4>
+      <div class="small">Curriculum<br/>Special Education<br/>Human Resources</div>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <div class="small">Privacy Policy<br/>Non-Discrimination<br/>Public Records</div>
+    </div>
+  </div>
+  <div style="max-width:var(--maxw);margin:18px auto;text-align:center;color:#cfe3ff;font-size:0.9rem">
+    © 2025 Calculra School District • All Rights Reserved
+  </div>
+</footer>
+<script>
+function updateClock(){
+  const el = document.getElementById('liveClock');
+  const now = new Date();
+  const opt = {weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'};
+  el.textContent = now.toLocaleString('en-US',opt);
+}
+updateClock(); setInterval(updateClock,60*1000);
+let slideIndex = 0;
+const slidesEl = document.getElementById('slides');
+const dots = document.querySelectorAll('.dot');
+function renderSlides(){
+  slidesEl.style.transform = `translateX(-${slideIndex*100}%)`;
+  dots.forEach((d,i)=>{ d.classList.toggle('active', i===slideIndex); d.setAttribute('aria-selected', i===slideIndex) });
+}
+function nextSlide(){ slideIndex = (slideIndex+1) % 3; renderSlides(); }
+function prevSlide(){ slideIndex = (slideIndex+2) % 3; renderSlides(); }
+function gotoSlide(i){ slideIndex = i; renderSlides(); }
+let carouselTimer = setInterval(nextSlide, 5000);
+const carouselEl = document.querySelector('.carousel');
+carouselEl.addEventListener('mouseenter', ()=> clearInterval(carouselTimer));
+carouselEl.addEventListener('mouseleave', ()=> carouselTimer = setInterval(nextSlide,5000));
+function toggleFAQ(btn, idx){
+  const ans = btn.nextElementSibling;
+  const shown = ans.style.display === 'block';
+  document.querySelectorAll('.faq-answer').forEach(a=>a.style.display='none');
+  if(!shown) ans.style.display='block';
+}
+(function initTicker(){
+  const ticker = document.getElementById('alertTicker');
+  const summary = document.getElementById('tickerSummary');
+  const alerts = [
+    {text: 'Weather: All classes meet as usual', level:'info'},
+    {text: 'Reminder: Flu shot clinics next week', level:'info'},
+    {text: 'Board meeting Sept 2 at 6:00 PM — public welcome', level:'notice'}
+  ];
+  let t=0;
+  setInterval(()=> {
+    const a = alerts[t % alerts.length];
+    ticker.textContent = a.text;
+    summary.textContent = a.text;
+    t++;
+  }, 7000);
+})();
+document.getElementById('siteSearch').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){ alert('Search is a demo on this demo site. Try: "enroll" or "meals".'); }
+});
+document.querySelectorAll('nav .nav-item').forEach(item=>{
+  item.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter') {
+      const dd = item.querySelector('.dropdown');
+      if(dd) dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+    }
+  });
+});
+</script>
+</body>
+</html>
